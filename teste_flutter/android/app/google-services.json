@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1052796699541",
+    "project_id": "appmarcella",
+    "storage_bucket": "appmarcella.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052796699541:android:3f101f67a6a74aa0c02c9c",
+        "android_client_info": {
+          "package_name": "com.mariaClaraProjects.marcellaApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052796699541-n5432eu973ldq5rr2nqbat60h9hkbhie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEmA8wy9dPY7-UhKyKV_fjS1F3Qs7Ed3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052796699541-n5432eu973ldq5rr2nqbat60h9hkbhie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
