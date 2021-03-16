@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teste_flutter/pages/cadastroNome.page.dart';
 import 'package:teste_flutter/pages/admin.page.dart';
+import 'package:intl/intl.dart';
 
 
 class NovoVideo extends StatelessWidget {
@@ -31,10 +32,48 @@ class NewVideo extends StatelessWidget {
     CollectionReference video = FirebaseFirestore.instance.collection('videos');
     var now = DateTime.now();
 
-    Future<void> addUser() {
+
+    telas(){
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()));
+    }
+
+    Future<void> _showMyDialog(String text) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Alerta!', textAlign: TextAlign.center),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(text, textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
+    Future<void> addUser() async {
       // Call the user's CollectionReference to add a new user
       String urrl = url.text;
       String noome = nome.text;
+      String daaata = new DateFormat("dd/MM/yyyy").format(now);
+      String data = "Data de postagem: "+ daaata;
+      print('sem senha: ${data}');
+
 
       if (urrl.length > 5 && noome.length> 5) {
         video
@@ -42,23 +81,32 @@ class NewVideo extends StatelessWidget {
             .set({
           'nome': noome,
           'url': urrl,
-          'data': now
+          'data': data
         })
             .then((value) => {
-          print("login"),
-        }, )
-            .catchError((error) => print("Failed to add user: $error"));
+          _showMyDialog("Vídeo adicionado com sucesso!"),
+              telas()
+        })
+            .catchError((error) {
+          _showMyDialog("Error");
+        });
+      } else {
+        _showMyDialog("Cada campo deve ter no mínimo 5 caracteres");
       }
-      MaterialPageRoute(builder: (context) => AdminPage());
     }
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 150, left: 40, right: 40),
+        padding: EdgeInsets.only(top: 240, left: 40, right: 40),
         child: ListView(
           children: <Widget>[
             SizedBox(
-              height: 20,
+              width: 110,
+              height: 110,
+              child: Image.asset('Images/logo.png',),
+            ),
+            SizedBox(
+              height: 30,
             ),
             TextField(
                 controller: url,
@@ -83,6 +131,7 @@ class NewVideo extends StatelessWidget {
               height: 20,
             ),
             TextField(
+                maxLength: 30,
                 controller: nome,
                 autofocus: false,
                 readOnly: false,
@@ -98,7 +147,7 @@ class NewVideo extends StatelessWidget {
                   ),
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
-                  labelText: "Digite o nome do video",
+                  labelText: "Digite o nome do vídeo",
                 )
             ),
             ButtonTheme(

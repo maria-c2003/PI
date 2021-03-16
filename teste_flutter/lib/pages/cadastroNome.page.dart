@@ -1,16 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:teste_flutter/pages/cadastroNome.page.dart';
 import 'package:teste_flutter/pages/login.page.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class CadastroCompletoPage extends StatelessWidget {
   String usuario, nome;
+  var link;
 
-  CadastroCompletoPage(this.usuario, this.nome);
+  CadastroCompletoPage(this.usuario, this.nome, this.link);
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +18,16 @@ class CadastroCompletoPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: Name(usuario, nome),
+      home: Name(usuario, nome, link),
     );
   }
 }
 
 class Name extends StatelessWidget {
   String usuario, nome;
+  var link;
 
-  Name(this.usuario, this.nome);
+  Name(this.usuario, this.nome, this.link);
   @override
   Widget build(BuildContext context) {
     TextEditingController email = TextEditingController();
@@ -36,21 +35,46 @@ class Name extends StatelessWidget {
     TextEditingController senha = TextEditingController();
     CollectionReference users = FirebaseFirestore.instance.collection('User');
 
-    Future<void> addUser() {
+    void tela() {
+      Navigator.pop(context);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    }
+
+    Future<void> addUser() async {
       // Call the user's CollectionReference to add a new user
       if (senha.text.length > 5) {
         users
             .doc(usuario)
             .set({
-          'nome': nome,
-          'senha': senha,
-          'user': usuario,
-          'email': email,
-          'telefone': telefone
-        })
-            .then((value) => MaterialPageRoute(builder: (context) => LoginPage()))
+              'nome': nome,
+              'senha': senha.text,
+              'user': usuario,
+              'email': email.text,
+              'telefone': telefone.text
+            })
+            .then((value) => tela())
             .catchError((error) => print("Failed to add user: $error"));
       }
+    }
+
+    abrirUrl() async {
+      FirebaseFirestore.instance
+          .collection('Link')
+          .doc('1')
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          String link = await documentSnapshot.data()['link'];
+          if (await canLaunch(link)) {
+            await launch(link);
+          } else {
+            throw 'Could not launch $link';
+          }
+        } else {
+          print("Failed to add user:");
+        }
+      });
     }
 
     return Scaffold(
@@ -58,15 +82,16 @@ class Name extends StatelessWidget {
         padding: EdgeInsets.only(top: 150, left: 40, right: 40),
         child: ListView(
           children: <Widget>[
-            /*SizedBox(
-             width: 128,
-             height: 128,
-             child: Image.asset(name),
-           ),*/
             SizedBox(
-              height: 20,
+              width: 110,
+              height: 110,
+              child: Image.asset('Images/logo.png',),
+            ),
+            SizedBox(
+              height: 30,
             ),
             TextField(
+                enabled: false,
                 autofocus: false,
                 readOnly: true,
                 obscureText: false,
@@ -82,12 +107,12 @@ class Name extends StatelessWidget {
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
                   labelText: usuario,
-                )
-            ),
+                )),
             SizedBox(
               height: 20,
             ),
             TextField(
+                enabled: false,
                 autofocus: false,
                 readOnly: true,
                 obscureText: false,
@@ -103,8 +128,7 @@ class Name extends StatelessWidget {
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
                   labelText: nome,
-                )
-            ),
+                )),
             SizedBox(
               height: 20,
             ),
@@ -125,8 +149,7 @@ class Name extends StatelessWidget {
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
                   labelText: "Digite seu e-mail",
-                )
-            ),
+                )),
             SizedBox(
               height: 20,
             ),
@@ -147,7 +170,9 @@ class Name extends StatelessWidget {
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
                   labelText: "Digite seu telefone",
-                )
+                )),
+            SizedBox(
+              height: 20,
             ),
             TextField(
                 controller: senha,
@@ -166,7 +191,9 @@ class Name extends StatelessWidget {
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
                   labelText: "Digite sua senha",
-                )
+                )),
+            SizedBox(
+              height: 20,
             ),
             ButtonTheme(
               height: 45,
@@ -185,9 +212,10 @@ class Name extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        onPressed: abrirUrl,
         tooltip: 'Increment',
-        label: Text(
-          'Cadastre-se',
+        label: Icon( Icons.chat_bubble_outline_outlined,
+          color: Colors.white,
         ),
         backgroundColor: Colors.grey,
       ), // This trailing comma makes auto-formatting nicer for build methods.

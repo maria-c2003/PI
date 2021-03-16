@@ -1,11 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teste_flutter/pages/newUser.page.dart';
+import 'package:teste_flutter/pages/verVideos.page.dart';
 import 'package:teste_flutter/pages/newVideo.page.dart';
-
+import 'package:teste_flutter/pages/verUsers.page.dart';
+import 'package:teste_flutter/pages/adminLink.page.dart';
 
 class AdminPage extends StatelessWidget {
   @override
@@ -32,13 +31,16 @@ class Botoes extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: () => {
-                  print("login"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VerVideosAdmin()),
+                  );
                 },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(
-                  "Ver vídeos disponiveis",
+                  "Ver vídeos disponíveis",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 color: Colors.pinkAccent[50],
@@ -47,8 +49,11 @@ class Botoes extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: () => {
-                  print("login"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => VerUsersAdmin()),
+                  );
                 },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
@@ -62,16 +67,16 @@ class Botoes extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NovoVideo()),
-              );
-            },
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NovoVideo()),
+                  );
+                },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(
-                  "Adicionar novo video",
+                  "Adicionar novo vídeo",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 color: Colors.pinkAccent[50],
@@ -89,7 +94,7 @@ class Botoes extends StatelessWidget {
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(
-                  "Adicionar novo usuario",
+                  "Adicionar novo usuário",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 color: Colors.pinkAccent[50],
@@ -97,6 +102,20 @@ class Botoes extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Link()),
+          );
+        },
+        child: const Icon(
+          IconData(58274, fontFamily: 'MaterialIcons'),
+          color: Colors.white,
+        ),
+        hoverColor: Colors.white,
+        backgroundColor: Colors.grey,
       ),
     );
   }

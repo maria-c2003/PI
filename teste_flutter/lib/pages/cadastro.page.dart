@@ -1,12 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teste_flutter/pages/cadastroNome.page.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class CadastroPage extends StatelessWidget {
+  var link;
+  CadastroPage(this.link);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,12 +16,15 @@ class CadastroPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: Casd(),
+      home: Casd(link),
     );
   }
 }
 
 class Casd extends StatelessWidget {
+  var link;
+  Casd(this.link);
+
   @override
   TextEditingController user = TextEditingController();
 
@@ -28,13 +32,31 @@ class Casd extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection('User');
 
-    Future<void> addUser() {
-      // Call the user's CollectionReference to add a new user
-      return users
-          .doc("mac")
-          .set({'nome': "Maria Clara dos Santos", 'user': "mac"})
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+    Future<void> _showMyDialog(String text) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Alerta!', textAlign: TextAlign.center),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(text, textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     Future<void> login() {
@@ -49,34 +71,52 @@ class Casd extends StatelessWidget {
         if (documentSnapshot.exists) {
           passFire = documentSnapshot.data()['senha'];
           print('Document data: ${passFire}');
-          if (passFire == null) {
+          if (passFire == "aa") {
             nome = documentSnapshot.data()['nome'];
+            Navigator.pop(context);
             Navigator.push(
-              context, MaterialPageRoute(builder: (context) => CadastroCompletoPage(usuario, nome)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CadastroCompletoPage(usuario, nome, link)));
           } else if (passFire != null) {
             print('senha certa');
-            //TODO aviso e abort, usuario ja cadastrado
+            _showMyDialog("Usuário ja cadastrado");
           }
         } else {
-         //TODO sem cadastro, falar com o administrador
+          _showMyDialog("Usuário sem cadastro, falar com o administrador");
         }
       });
     }
 
-    ;
+    abrirUrl() async {
+      FirebaseFirestore.instance
+          .collection('Link')
+          .doc('1')
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          String link = await documentSnapshot.data()['link'];
+          if (await canLaunch(link)) {
+            await launch(link);
+          } else {
+            throw 'Could not launch $link';
+          }
+        }
+      });
+    }
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 300, left: 40, right: 40),
+        padding: EdgeInsets.only(top: 270, left: 40, right: 40),
         child: ListView(
           children: <Widget>[
-            /*SizedBox(
-             width: 128,
-             height: 128,
-             child: Image.asset(name),
-           ),*/
             SizedBox(
-              height: 20,
+              width: 110,
+              height: 110,
+              child: Image.asset('Images/logo.png',),
+            ),
+            SizedBox(
+              height: 40,
             ),
             TextField(
                 controller: user,
@@ -93,7 +133,7 @@ class Casd extends StatelessWidget {
                   ),
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
-                  labelText: 'Informe o usuario',
+                  labelText: 'Informe o usuário',
                 )),
             SizedBox(
               height: 20,
@@ -115,13 +155,13 @@ class Casd extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        onPressed: abrirUrl,
         tooltip: 'Increment',
-        label: Text(
-          'Cadastre-se',
+        label: Icon( Icons.chat_bubble_outline_outlined,
+          color: Colors.white,
         ),
         backgroundColor: Colors.grey,
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
-

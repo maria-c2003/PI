@@ -1,18 +1,19 @@
 name: teste_flutter
 description: A new Flutter application.
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: "^0.7.0"
-  cloud_firestore: "^0.16.0+1"
+  firebase_core: ^0.7.0
+  cloud_firestore: ^0.16.0+1
+  intl: ^0.15.8
+  url_launcher: ^5.5.0
+  youtube_plyr_iframe: 1.3.6+1
 
 
 
@@ -22,3 +23,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - Images/logo.png

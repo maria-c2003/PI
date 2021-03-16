@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mariaClaraProjects.marcellaApp">
    <application
-        android:label="PI - Maria Clara"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Aplicativo para Pilates"
+        android:icon="@mipmap/ic_pilates">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

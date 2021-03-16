@@ -1,9 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:teste_flutter/pages/cadastroNome.page.dart';
 import 'package:teste_flutter/pages/admin.page.dart';
 
 
@@ -30,38 +27,89 @@ class newUser extends StatelessWidget {
     TextEditingController nome = TextEditingController();
     CollectionReference users = FirebaseFirestore.instance.collection('User');
 
-    Future<void> addUser() {
+    Future<void> _showMyDialog(String text) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Alerta!', textAlign: TextAlign.center),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(text, textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    void tela(){
+      Navigator.pop(context);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AdminPage()));
+
+    }
+
+    Future<void> addUser() async {
       // Call the user's CollectionReference to add a new user
       String noome = nome.text;
       String uuser = user.text;
 
-      if (uuser.length > 5 && noome.length> 5) {
-        users
-            .doc(uuser)
-            .set({
-          'nome': noome,
-          'senha': "",
-          'user': uuser
-        })
-            .then((value) => MaterialPageRoute(builder: (context) => AdminPage()))
-            .catchError((error) => print("Failed to add user: $error"));
-      }
+      users
+          .doc(uuser)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          _showMyDialog("Usuário ja existe!");
+        } else if (uuser.length > 5 && noome.length> 5) {
+          users
+              .doc(uuser)
+              .set({
+            'nome': noome,
+            'senha': "aa",
+            'user': uuser
+          })
+              .then((value) => {
+            _showMyDialog("Usuário adicionado com sucesso!"),
+            tela()
+          })
+              .catchError((error) => {
+            _showMyDialog("Error")
+          });
+        } else {
+          _showMyDialog("Cada campo deve ter no mínimo 5 caracteres");
+        }
+      });
     }
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 150, left: 40, right: 40),
+        padding: EdgeInsets.only(top: 240, left: 40, right: 40),
         child: ListView(
           children: <Widget>[
-            /*SizedBox(
-             width: 128,
-             height: 128,
-             child: Image.asset(name),
-           ),*/
             SizedBox(
-              height: 20,
+              width: 110,
+              height: 110,
+              child: Image.asset('Images/logo.png',),
+            ),
+            SizedBox(
+              height: 30,
             ),
             TextField(
+              maxLength: 30,
                 controller: user,
                 autofocus: false,
                 readOnly: false,
@@ -77,13 +125,11 @@ class newUser extends StatelessWidget {
                   ),
                   filled: true,
                   contentPadding: EdgeInsets.all(15),
-                  labelText: "Digite o usuario do aluno",
+                  labelText: "Digite o usuário do aluno",
                 )
             ),
-            SizedBox(
-              height: 20,
-            ),
             TextField(
+                maxLength: 30,
                 controller: nome,
                 autofocus: false,
                 readOnly: false,
@@ -102,14 +148,19 @@ class newUser extends StatelessWidget {
                   labelText: "Digite o nome do aluno",
                 )
             ),
+            SizedBox(
+              height: 10,
+            ),
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: addUser,
+                onPressed:() {
+                  addUser();
+                },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(
-                  "Continuar",
+                  "Salvar",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 color: Colors.pinkAccent[50],
