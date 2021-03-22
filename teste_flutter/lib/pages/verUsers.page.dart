@@ -51,6 +51,18 @@ class Usersss extends StatelessWidget {
           nome = documentSnapshot.data()['nome'].toString();
           email = documentSnapshot.data()['email'].toString();
           telefone = documentSnapshot.data()['telefone'].toString();
+          print('Index2: ${telefone.length}');
+            if (telefone == "null"){
+              telefone = "Número não cadastrado";
+            }
+            if (email == "null"){
+              email = "Email não cadastrado";
+            }
+            if (senha == "aa"){
+              senha = "Senha não cadastrada";
+            } else {
+              senha = "Senha cadastrada";
+            }
           print('Document data: ${usuario}');
           Navigator.push(
               context,

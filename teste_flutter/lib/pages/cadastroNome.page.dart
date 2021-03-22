@@ -41,9 +41,42 @@ class Name extends StatelessWidget {
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
 
+    Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Alerta!', textAlign: TextAlign.center),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Alerta!',
+                      textAlign: TextAlign.center),
+                  Text(
+                      'Cada campo deve ter no mínimo 5 caracteres!',
+                      textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     Future<void> addUser() async {
       // Call the user's CollectionReference to add a new user
-      if (senha.text.length > 5) {
+      if (senha.text.length > 5 &&
+          email.text.length > 5 &&
+          telefone.text.length > 5) {
         users
             .doc(usuario)
             .set({
@@ -55,6 +88,8 @@ class Name extends StatelessWidget {
             })
             .then((value) => tela())
             .catchError((error) => print("Failed to add user: $error"));
+      } else {
+        _showMyDialog();
       }
     }
 
