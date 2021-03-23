@@ -53,14 +53,14 @@ class Reset extends StatelessWidget {
       );
     }
 
-    Future<void> login() async {
+    Future<void> resetar() async {
       String pass = senha.text;
       String user = usuario.text;
       users.doc(user).get().then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
           String email = documentSnapshot.data()['email'];
-          String atua = documentSnapshot.data()['senha'];
-          if (email.length > 5 && atua == "aa") {
+          String senhaAtual = documentSnapshot.data()['senha'];
+          if (email.length > 5 && senhaAtual == "aa") {
             users
                 .doc(user)
                 .update({'senha': pass})
@@ -147,7 +147,7 @@ class Reset extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: login,
+                onPressed: resetar,
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(

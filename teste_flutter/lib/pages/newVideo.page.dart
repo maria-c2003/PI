@@ -33,7 +33,7 @@ class NewVideo extends StatelessWidget {
     var now = DateTime.now();
 
 
-    telas(){
+    void telas(){
       Navigator.pop(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPage()));
     }
@@ -66,12 +66,12 @@ class NewVideo extends StatelessWidget {
     }
 
 
-    Future<void> addUser() async {
+    Future<void> addVideo() async {
       // Call the user's CollectionReference to add a new user
       String urrl = url.text;
       String noome = nome.text;
-      String daaata = new DateFormat("dd/MM/yyyy").format(now);
-      String data = "Data de postagem: "+ daaata;
+      String daata = new DateFormat("dd/MM/yyyy").format(now);
+      String data = "Data de postagem: "+ daata;
       print('sem senha: ${data}');
 
 
@@ -153,7 +153,7 @@ class NewVideo extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: addUser,
+                onPressed: addVideo,
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(

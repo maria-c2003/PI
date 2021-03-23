@@ -36,11 +36,9 @@ class Usersss extends StatelessWidget {
           context, MaterialPageRoute(builder: (context) => AdminPage()));
     }
 
-    void proxTela(user, index, index2) async {
+    void verDetalheUser(user) async {
       String usuario = user.toString();
       String senha, nome, email, telefone;
-      print('Index:: ${index}');
-      print('Index2: ${index2}');
       await FirebaseFirestore.instance
           .collection('User')
           .doc(usuario)
@@ -131,8 +129,8 @@ class Usersss extends StatelessWidget {
                               buttonColor: Colors.white,
                               child: RaisedButton(
                                 onPressed: () {
-                                  proxTela(querySnapshot.data?.docs[index]
-                                      .data()['user'], index, querySnapshot.data?.docs[index].id);
+                                  verDetalheUser(querySnapshot.data?.docs[index]
+                                      .data()['user']);
                                 },
                                 color: Colors.white,
                                 shape: new RoundedRectangleBorder(

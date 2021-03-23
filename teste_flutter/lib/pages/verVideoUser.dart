@@ -25,18 +25,13 @@ class VideosUser extends StatelessWidget {
 
   Future<QuerySnapshot> querySnapshot;
 
-  Future<QuerySnapshot> viewUser() async {
+  Future<QuerySnapshot> viewVideo() async {
     // Call the user's CollectionReference to add a new user
     return await vd.get();
   }
 
   @override
   Widget build(BuildContext context) {
-    void tela() {
-      Navigator.pop(context);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminPage()));
-    }
 
     Widget ytPlayer(url) {
       videoID = YoutubePlayerController.convertUrlToId(url);
@@ -125,7 +120,7 @@ class VideosUser extends StatelessWidget {
           ),
           Expanded(
             child: FutureBuilder(
-              future: viewUser(),
+              future: viewVideo(),
               builder: (context, AsyncSnapshot<QuerySnapshot> querySnapshot) {
                 if (querySnapshot.connectionState == ConnectionState.waiting) {
                   return new Center(
@@ -235,90 +230,3 @@ class _YoutubeViewerState extends State<YoutubeViewer> {
   }
 }
 
-class YoutubePlayer extends StatefulWidget {
-  final String videoID;
-  YoutubePlayer(this.videoID);
-  @override
-  _YoutubePlayerState createState() => _YoutubePlayerState();
-}
-
-class _YoutubePlayerState extends State<YoutubePlayer> {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          _showDialog(
-            context,
-            widget.videoID,
-          );
-        },
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (kIsWeb && constraints.maxWidth > 800) {
-                      return Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: new Image.network(
-                            YoutubePlayerController.getThumbnail(
-                                videoId: widget.videoID,
-                                // todo: get thumbnail quality from list
-                                quality: ThumbnailQuality.max,
-                                webp: false),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width * 2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: new Image.network(
-                            YoutubePlayerController.getThumbnail(
-                                videoId: widget.videoID,
-                                // todo: get thumbnail quality from list
-                                quality: ThumbnailQuality.max,
-                                webp: false),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-            const Icon(
-              Icons.play_circle_filled,
-              color: Colors.white,
-              size: 55.0,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showDialog(context, videoID) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return YoutubeViewer(videoID);
-      },
-    );
-  }
-}

@@ -14,12 +14,12 @@ class NovoUser extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: newUser(),
+      home: NewUser(),
     );
   }
 }
 
-class newUser extends StatelessWidget {
+class NewUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

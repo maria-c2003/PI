@@ -31,7 +31,6 @@ class DetailVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference video = FirebaseFirestore.instance.collection('videos');
 
 
     telas(){

@@ -25,18 +25,13 @@ class Videos extends StatelessWidget {
 
   Future<QuerySnapshot> querySnapshot;
 
-  Future<QuerySnapshot> viewUser() async {
+  Future<QuerySnapshot> viewVideo() async {
     // Call the user's CollectionReference to add a new user
     return await vd.get();
   }
 
   @override
   Widget build(BuildContext context) {
-    void tela() {
-      Navigator.pop(context);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AdminPage()));
-    }
 
     void proximaTela(id) async {
       String data, nome, url;
@@ -68,7 +63,7 @@ class Videos extends StatelessWidget {
           ),
           Expanded(
             child: FutureBuilder(
-              future: viewUser(),
+              future: viewVideo(),
               builder: (context, AsyncSnapshot<QuerySnapshot> querySnapshot) {
                 if (querySnapshot.connectionState == ConnectionState.waiting) {
                   return new Center(

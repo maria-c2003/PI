@@ -18,12 +18,12 @@ class LoginPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: Const(),
+      home: Login(),
     );
   }
 }
 
-class Const extends StatelessWidget {
+class Login extends StatelessWidget {
   TextEditingController user = TextEditingController();
   TextEditingController senha = TextEditingController();
 

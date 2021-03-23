@@ -280,14 +280,6 @@ class User extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        tooltip: 'Increment',
-        label: Icon( Icons.chat_bubble_outline_outlined,
-          color: Colors.white,
-        ),
-        backgroundColor: Colors.grey,
-        onPressed: () {  },
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

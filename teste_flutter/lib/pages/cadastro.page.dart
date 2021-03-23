@@ -16,14 +16,14 @@ class CadastroPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: Casd(link),
+      home: Cadastro(link),
     );
   }
 }
 
-class Casd extends StatelessWidget {
+class Cadastro extends StatelessWidget {
   var link;
-  Casd(this.link);
+  Cadastro(this.link);
 
   @override
   TextEditingController user = TextEditingController();
@@ -59,7 +59,7 @@ class Casd extends StatelessWidget {
       );
     }
 
-    Future<void> login() {
+    Future<void> nextStep() {
       String usuario = user.text;
       String nome;
       String passFire;
@@ -141,7 +141,7 @@ class Casd extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: login,
+                onPressed: nextStep,
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(
