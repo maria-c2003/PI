@@ -62,7 +62,7 @@ class Login extends StatelessWidget {
       );
     }
 
-    Future<void> login() async {
+    Future<void> login(contexxt) async {
       String nome = user.text;
       String pass = senha.text;
       String passFire;
@@ -72,13 +72,13 @@ class Login extends StatelessWidget {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          passFire = documentSnapshot.data()['senha'];
-          print('Document data: ${passFire}');
           if (nome == 'admin' && pass == 'admin2021') {
+            Navigator.of(contexxt).pop();
             Navigator.pop(context);
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => AdminPage()));
           } else {
+            Navigator.of(contexxt).pop();
             _showMyDialog();
           }
         } else if (pass.length > 2) {
@@ -92,18 +92,46 @@ class Login extends StatelessWidget {
               print('Document data: ${passFire}');
               if (passFire == pass) {
                 print('senha certa');
+                Navigator.of(contexxt).pop();
                 Navigator.pop(context);
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => AlunoPage()));
               } else {
+                Navigator.of(contexxt).pop();
                 _showMyDialog();
               }
             }
           });
         } else {
+          Navigator.of(contexxt).pop();
           _showMyDialog();
         }
       });
+    }
+
+    Future<void> loading() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext contexxt) {
+          login(contexxt);
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                height: MediaQuery.of(context).size.height * 0.1,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: new Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
     }
 
     Future<void> getLink() async {
@@ -124,10 +152,12 @@ class Login extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             SizedBox(
-             width: 110,
-             height: 110,
-             child: Image.asset('Images/logo.png',),
-           ),
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.height * 0.12,
+              child: Image.asset(
+                'Images/logo.png',
+              ),
+            ),
             SizedBox(
               height: 40,
             ),
@@ -174,7 +204,7 @@ class Login extends StatelessWidget {
             ButtonTheme(
               height: 45,
               child: RaisedButton(
-                onPressed: login,
+                onPressed: loading,
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(50)),
                 child: Text(

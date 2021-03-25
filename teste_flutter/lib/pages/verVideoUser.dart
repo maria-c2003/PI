@@ -40,7 +40,6 @@ class VideosUser extends StatelessWidget {
         child: InkWell(
           onTap: () {
             videoID = YoutubePlayerController.convertUrlToId(url);
-            print('passou $videoID');
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -50,7 +49,7 @@ class VideosUser extends StatelessWidget {
             alignment: Alignment.center,
             children: <Widget>[
               SizedBox(
-                width: 400,
+                width: MediaQuery.of(context).size.width * 0.8,
               child: Stack(
                 alignment: Alignment.center,
                 children: <Widget>[

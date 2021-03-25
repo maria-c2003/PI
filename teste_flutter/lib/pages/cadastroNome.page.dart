@@ -38,7 +38,7 @@ class Name extends StatelessWidget {
     void tela() {
       Navigator.pop(context);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
     }
 
     Future<void> _showMyDialog() async {

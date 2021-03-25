@@ -87,8 +87,8 @@ class Reset extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             SizedBox(
-              width: 110,
-              height: 110,
+              width: MediaQuery.of(context).size.width * 0.12,
+              height: MediaQuery.of(context).size.height * 0.12,
               child: Image.asset('Images/logo.png',),
             ),
             SizedBox(
